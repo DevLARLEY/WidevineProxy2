@@ -79,7 +79,7 @@ export class AsyncLocalStorage {
 
 export class DeviceManager {
     static async saveWidevineDevice(name, value) {
-        const result = await AsyncSyncStorage.getStorage(['devices']);
+        const result = await AsyncSyncStorage.getStorage(["devices"]);
         const array = result.devices === undefined ? [] : result.devices;
         array.push(name);
         await AsyncSyncStorage.setStorage({ devices: array });
@@ -91,9 +91,9 @@ export class DeviceManager {
         return result[name] || "";
     }
 
-    static setWidevineDevice(name, value){
-        const wvd_combobox = document.getElementById('wvd-combobox');
-        const wvd_element = document.createElement('option');
+    static setWidevineDevice(name, value) {
+        const wvd_combobox = document.getElementById("wvd-combobox");
+        const wvd_element = document.createElement("option");
 
         wvd_element.text = name;
         wvd_element.value = value;
@@ -102,7 +102,7 @@ export class DeviceManager {
     }
 
     static async loadSetAllWidevineDevices() {
-        const result = await AsyncSyncStorage.getStorage(['devices']);
+        const result = await AsyncSyncStorage.getStorage(["devices"]);
         const array = result.devices || [];
         for (const item of array) {
             this.setWidevineDevice(item, await this.loadWidevineDevice(item));
@@ -119,13 +119,13 @@ export class DeviceManager {
     }
 
     static async selectWidevineDevice(name) {
-        document.getElementById('wvd-combobox').value = await this.loadWidevineDevice(name);
+        document.getElementById("wvd-combobox").value = await this.loadWidevineDevice(name);
     }
 
     static async removeSelectedWidevineDevice() {
         const selected_device_name = await DeviceManager.getSelectedWidevineDevice();
 
-        const result = await AsyncSyncStorage.getStorage(['devices']);
+        const result = await AsyncSyncStorage.getStorage(["devices"]);
         const array = result.devices === undefined ? [] : result.devices;
 
         const index = array.indexOf(selected_device_name);
@@ -144,7 +144,7 @@ export class DeviceManager {
 
 export class RemoteCDMManager {
     static async saveRemoteCDM(name, obj) {
-        const result = await AsyncSyncStorage.getStorage(['remote_cdms']);
+        const result = await AsyncSyncStorage.getStorage(["remote_cdms"]);
         const array = result.remote_cdms === undefined ? [] : result.remote_cdms;
         array.push(name);
         await AsyncSyncStorage.setStorage({ remote_cdms: array });
@@ -156,9 +156,9 @@ export class RemoteCDMManager {
         return JSON.stringify(result[name] || {});
     }
 
-    static setRemoteCDM(name, value){
-        const remote_combobox = document.getElementById('remote-combobox');
-        const remote_element = document.createElement('option');
+    static setRemoteCDM(name, value) {
+        const remote_combobox = document.getElementById("remote-combobox");
+        const remote_element = document.createElement("option");
 
         remote_element.text = name;
         remote_element.value = value;
@@ -167,7 +167,7 @@ export class RemoteCDMManager {
     }
 
     static async loadSetAllRemoteCDMs() {
-        const result = await AsyncSyncStorage.getStorage(['remote_cdms']);
+        const result = await AsyncSyncStorage.getStorage(["remote_cdms"]);
         const array = result.remote_cdms || [];
         for (const item of array) {
             this.setRemoteCDM(item, await this.loadRemoteCDM(item));
@@ -184,13 +184,13 @@ export class RemoteCDMManager {
     }
 
     static async selectRemoteCDM(name) {
-        document.getElementById('remote-combobox').value = await this.loadRemoteCDM(name);
+        document.getElementById("remote-combobox").value = await this.loadRemoteCDM(name);
     }
 
     static async removeSelectedRemoteCDM() {
         const selected_remote_cdm_name = await RemoteCDMManager.getSelectedRemoteCDM();
 
-        const result = await AsyncSyncStorage.getStorage(['remote_cdms']);
+        const result = await AsyncSyncStorage.getStorage(["remote_cdms"]);
         const array = result.remote_cdms === undefined ? [] : result.remote_cdms;
 
         const index = array.indexOf(selected_remote_cdm_name);
@@ -218,9 +218,9 @@ export class SettingsManager {
     }
 
     static downloadFile(content, filename) {
-        const blob = new Blob([content], { type: 'application/octet-stream' });
+        const blob = new Blob([content], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = filename;
         document.body.appendChild(a);
@@ -239,7 +239,7 @@ export class SettingsManager {
                 const b64_device = uint8ArrayToBase64(new Uint8Array(result));
                 const device_name = widevine_device.get_name();
 
-                if (!await DeviceManager.loadWidevineDevice(device_name)) {
+                if (!(await DeviceManager.loadWidevineDevice(device_name))) {
                     await DeviceManager.saveWidevineDevice(device_name, b64_device);
                 }
 
@@ -261,9 +261,9 @@ export class SettingsManager {
 
     static setDarkMode(dark_mode) {
         const textImage = document.getElementById("textImage");
-        const toggle = document.getElementById('darkModeToggle');
+        const toggle = document.getElementById("darkModeToggle");
         toggle.checked = dark_mode;
-        document.body.classList.toggle('dark-mode', dark_mode);
+        document.body.classList.toggle("dark-mode", dark_mode);
         textImage.src = dark_mode ? "../images/proxy_text_dark.png" : "../images/proxy_text.png";
     }
 
@@ -289,12 +289,11 @@ export class SettingsManager {
                     json_file.host,
                     json_file.secret,
                     json_file.device_name ?? json_file.name,
-
                 );
                 const device_name = remote_cdm.get_name();
                 console.log("NAME:", device_name);
 
-                if (await RemoteCDMManager.loadRemoteCDM(device_name) === "{}") {
+                if ((await RemoteCDMManager.loadRemoteCDM(device_name)) === "{}") {
                     await RemoteCDMManager.saveRemoteCDM(device_name, json_file);
                 }
 
@@ -317,23 +316,23 @@ export class SettingsManager {
     static setSelectedDeviceType(device_type) {
         switch (device_type) {
             case "WVD":
-                const wvd_select = document.getElementById('wvd_select');
+                const wvd_select = document.getElementById("wvd_select");
                 wvd_select.checked = true;
                 break;
             case "REMOTE":
-                const remote_select = document.getElementById('remote_select');
+                const remote_select = document.getElementById("remote_select");
                 remote_select.checked = true;
                 break;
         }
     }
 
-    static async saveUseShakaPackager(use_shaka) {
-        await AsyncSyncStorage.setStorage({ use_shaka: use_shaka });
+    static async saveNoCheckCertificate(no_check_certificate) {
+        await AsyncSyncStorage.setStorage({ no_check_certificate });
     }
 
-    static async getUseShakaPackager() {
-        const result = await AsyncSyncStorage.getStorage(["use_shaka"]);
-        return result["use_shaka"] ?? true;
+    static async getNoCheckCertificate() {
+        const result = await AsyncSyncStorage.getStorage(["no_check_certificate"]);
+        return result["no_check_certificate"] ?? false;
     }
 
     static async saveExecutableName(exe_name) {
@@ -342,7 +341,7 @@ export class SettingsManager {
 
     static async getExecutableName() {
         const result = await AsyncSyncStorage.getStorage(["exe_name"]);
-        return result["exe_name"] ?? "N_m3u8DL-RE";
+        return result["exe_name"] ?? "drm download";
     }
 }
 
@@ -354,31 +353,33 @@ export function intToUint8Array(num) {
 }
 
 export function compareUint8Arrays(arr1, arr2) {
-    if (arr1.length !== arr2.length)
-        return false;
+    if (arr1.length !== arr2.length) return false;
     return Array.from(arr1).every((value, index) => value === arr2[index]);
 }
 
 export function uint8ArrayToHex(buffer) {
-    return Array.prototype.map.call(buffer, x => x.toString(16).padStart(2, '0')).join('');
+    return Array.prototype.map.call(buffer, (x) => x.toString(16).padStart(2, "0")).join("");
 }
 
 export function uint8ArrayToString(uint8array) {
-    return String.fromCharCode.apply(null, uint8array)
+    return String.fromCharCode.apply(null, uint8array);
 }
 
 export function uint8ArrayToBase64(uint8array) {
     return btoa(String.fromCharCode.apply(null, uint8array));
 }
 
-export function base64toUint8Array(base64_string){
-    return Uint8Array.from(atob(base64_string), c => c.charCodeAt(0))
+export function base64toUint8Array(base64_string) {
+    return Uint8Array.from(atob(base64_string), (c) => c.charCodeAt(0));
 }
 
 export function stringToUint8Array(string) {
-    return Uint8Array.from(string.split("").map(x => x.charCodeAt()))
+    return Uint8Array.from(string.split("").map((x) => x.charCodeAt()));
 }
 
-export function stringToHex(string){
-    return string.split("").map(c => c.charCodeAt(0).toString(16).padStart(2, "0")).join("");
+export function stringToHex(string) {
+    return string
+        .split("")
+        .map((c) => c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("");
 }
