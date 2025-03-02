@@ -1,6 +1,6 @@
 import "../protobuf.min.js";
 import "../license_protocol.js";
-import {AsyncLocalStorage, base64toUint8Array, stringToUint8Array, DeviceManager, RemoteCDMManager, SettingsManager} from "../util.js";
+import {AsyncLocalStorage, base64toUint8Array, DeviceManager, RemoteCDMManager, SettingsManager} from "../util.js";
 
 const key_container = document.getElementById('key-container');
 
@@ -30,10 +30,60 @@ remote_select.addEventListener('change', async function (){
     }
 });
 
+async function getLogs() {
+    return await AsyncLocalStorage.getStorage(null);
+}
+
 const export_button = document.getElementById('export');
 export_button.addEventListener('click', async function() {
-    const logs = await AsyncLocalStorage.getStorage(null);
-    SettingsManager.downloadFile(stringToUint8Array(JSON.stringify(logs)), "logs.json");
+    const logs = await getLogs();
+    SettingsManager.downloadFile(new Blob([JSON.stringify(logs)]), "logs.json");
+});
+
+const export_kodi_m3u8_button = document.getElementById('export_kodi_m3u8');
+export_kodi_m3u8_button.addEventListener('click', async function () {
+    const logs = await getLogs();
+
+    const getKodiDrmLegacyProp = log => "#KODIPROP:inputstream.adaptive.drm_legacy=org.w3.clearkey|" +
+        log.keys.map(({kid, k}) => `${kid}:${k}`).join(',');
+
+    const getKodiDrmProp = log => {
+        const drm = {};
+        drm["org.w3.clearkey"] = {};
+        drm["org.w3.clearkey"]["license"] = {};
+        drm["org.w3.clearkey"]["license"]["keyids"] = {};
+        log.keys.forEach(({kid, k}) => {
+            drm["org.w3.clearkey"]["license"]["keyids"][`${kid}`] = `${k}`
+        });
+        return `#KODIPROP:inputstream.adaptive.drm=${JSON.stringify(drm)}`;
+    };
+
+    const m3u8 = "#EXTM3U\n" + Object.values(logs)
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .map(log => {
+            try {
+                const manifest = log.manifests.find(manifest => manifest.url);
+                if (manifest) {
+                    const legacy_drm = true;
+                    return [
+                        `#EXTINF:-1,${log.title}`,
+                        '#KODIPROP:inputstream=inputstream.adaptive',
+                        '#KODIPROP:inputstream.adaptive.common_headers=' +
+                        Object.entries(manifest.headers).map(([key, value]) => `${key}=${value}`).join('&'),
+                        legacy_drm ? getKodiDrmLegacyProp(log) : getKodiDrmProp(log),
+                        manifest.url
+                    ].join('\n');
+                } else {
+                    console.warn('Skipping ' + JSON.stringify(log) + ' as it has no url');
+                }
+            } catch (e) {
+                console.error('Skipping ' + JSON.stringify(log) + ' due to ' + e);
+            }
+            return undefined;
+        })
+        .filter(entry => entry)
+        .join('\n');
+    SettingsManager.downloadFile(new Blob([m3u8]), 'kodi.m3u8');
 });
 // ======================================
 
@@ -145,6 +195,9 @@ async function appendLog(result) {
                 URL:<input type="text" class="text-box" value="${result.url}">
             </label>
             <label class="expanded-only right-bound">
+            <label class="expanded-only right-bound">
+                Title:<input type="text" class="text-box" value="${result.title}">
+            </label>
             <label class="expanded-only right-bound">
                 PSSH:<input type="text" class="text-box" value="${result.pssh_data}">
             </label>
