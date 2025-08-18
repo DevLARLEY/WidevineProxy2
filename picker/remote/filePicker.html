@@ -1,7 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Device File</title>
+    <link rel="stylesheet" href="filePicker.css">
+</head>
+
 <body>
-    <input type="file" id="fileInput" accept=".json"/>
+
+    <label for="fileInput" class="file-drop-zone">
+        <div class="file-drop-zone__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+        </div>
+        <div class="file-drop-zone__text">
+            Click to select or drop JSON a file here
+        </div>
+        <span class="file-drop-zone__format">Supports .wvd file</span>
+    </label>
+
+    <input type="file" id="fileInput" accept=".json" hidden />
+
     <script type="module" src="filePicker.js" defer></script>
 </body>
+
 </html>

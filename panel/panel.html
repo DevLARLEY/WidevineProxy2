@@ -1,71 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title></title>
+    <title>WidevineProxy</title>
+    <meta charset="UTF-8">
     <script type="module" src="panel.js" defer></script>
     <link rel="stylesheet" href="panel.css">
 </head>
-<body style="min-width: 200px;">
+
+<body>
+
     <div class="header">
-        <img src="../images/icon-128.png" alt="WidevineProxy Icon" width="64"/>
-        <img id="textImage" src="../images/proxy_text.png" alt="ProxyText" width="200"/>
+        <img src="../images/icon-128.png" alt="WidevineProxy Icon" width="48" height="48" />
+        <img id="textImage" src="../images/proxy_text.png" alt="ProxyText" width="150" />
     </div>
+
     <fieldset>
         <legend>Settings</legend>
-        <div id="settings">
-            <!-- Enabled -->
-            <div>
-                <input type="checkbox" id="enabled">
-                <label for="enabled"> Enabled</label>
-            </div>
-            <!-- Dark mode -->
-            <div>
-                <label class="switch">
+        <div id="settings-grid">
+            <label>
+                <span class="switch">
+                    <input type="checkbox" id="enabled">
+                    <span class="slider"></span>
+                </span>
+                Enabled
+            </label>
+            <label>
+                <span class="switch">
                     <input type="checkbox" id="darkModeToggle">
                     <span class="slider"></span>
+                </span>
+                Dark Mode
+            </label>
+            <div>
+                <label for="wvd_select">
+                    <input type="radio" id="wvd_select" name="cdm_type" value="wvd">
+                    Widevine Device
                 </label>
-                <label for="enabled"> Dark mode</label>
+                <label for="remote_select">
+                    <input type="radio" id="remote_select" name="cdm_type" value="remote">
+                    Remote CDM
+                </label>
             </div>
-            <!-- Type select -->
-            <div id="type-select">
-                <a>Device Type:</a><br>
-                <input type="radio" id="wvd_select" name="cdm_type" value="wvd">
-                <label for="wvd_select">Widevine Device</label><br>
-                <input type="radio" id="remote_select" name="cdm_type" value="remote">
-                <label for="remote_select">Remote CDM</label><br>
+            <div>
+                <label for="use-shaka">
+                    <input type="checkbox" id="use-shaka">
+                    Use Shaka Packager
+                </label>
+                <label for="downloader-name">
+                    <input type="text" id="downloader-name" placeholder="Executable name">
+                </label>
             </div>
         </div>
-        <fieldset id="wvd">
-            <legend>Widevine Device</legend>
+    </fieldset>
+
+    <fieldset id="wvd">
+        <legend>Widevine Device</legend>
+        <div class="button-group">
             <button type="button" id="fileInput">Choose File</button>
             <button type="button" id="remove">Remove</button>
-            <button type="button" id="download">Download</button><br>
-            <label>
-                <select id="wvd-combobox"></select>
-            </label>
-        </fieldset>
-        <fieldset id="remote">
-            <legend>Remote CDM</legend>
+            <button type="button" id="download">Download</button>
+        </div>
+        <select id="wvd-combobox"></select>
+    </fieldset>
+
+    <fieldset id="remote">
+        <legend>Remote CDM</legend>
+        <div class="button-group">
             <button type="button" id="remoteInput">Choose remote.json</button>
             <button type="button" id="remoteRemove">Remove</button>
-            <button type="button" id="remoteDownload">Download</button><br>
-            <label>
-                <select id="remote-combobox"></select>
-            </label>
-        </fieldset>
-        <fieldset id="command-options">
-            <legend>Command options</legend>
-            <input type="checkbox" id="use-shaka">
-            <label for="use-shaka"> Use Shaka Packager</label><br>
-            <label for="downloader-name">Executable name: </label>
-            <input type="text" class="text-box" id="downloader-name">
-        </fieldset>
-        <button type="button" id="export">Export Logs</button>
+            <button type="button" id="remoteDownload">Download</button>
+        </div>
+        <select id="remote-combobox"></select>
     </fieldset>
+
     <fieldset>
-        <legend>Keys</legend>
-        <button type="button" id="clear">Clear</button>
+        <legend>Logs</legend>
+        <button type="button" id="clear">Clear All Logs</button>
         <div id="key-container"></div>
+        <button type="button" id="export" style="margin-top: 0.5rem; width: 100%;">Export Logs as JSON</button>
     </fieldset>
+
 </body>
+
 </html>

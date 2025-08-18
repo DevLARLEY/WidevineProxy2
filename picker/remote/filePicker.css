@@ -1,0 +1,60 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.file-drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 320px;
+  max-width: 90%;
+  padding: 40px;
+  border: 2px dashed #444;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  text-align: center;
+}
+
+.file-drop-zone:hover {
+  background-color: #1e1e1e;
+  border-color: #666;
+}
+
+.file-drop-zone__icon {
+  margin-bottom: 16px;
+  color: #888;
+}
+
+.file-drop-zone__text {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.file-drop-zone__format {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 8px;
+}
+
+#fileInput[hidden] {
+  display: none;
+}

@@ -9,6 +9,20 @@ Modifies the challenge before it reaches the web player and retrieves the decryp
 + Supports Widevine Device files
 + Manifest V3 compliant
 
+---
+<div align="center">
+  <p>OLD UI </p>
+  <img src="imgs/old.png" alt="Old">
+</div>
+
+
+<div align="center">
+  <p>NEW UI </p>
+  <img src="imgs/new.png" alt="New">
+</div>
+
+---
+
 ## Widevine Devices
 This addon requires a Widevine Device file to work, which is not provided by this project.
 + Use an existing Remote CDM like [this one](https://github.com/user-attachments/files/21834836/remote.json)
