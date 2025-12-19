@@ -343,6 +343,15 @@ export class SettingsManager {
         const result = await AsyncSyncStorage.getStorage(["exe_name"]);
         return result["exe_name"] ?? "N_m3u8DL-RE";
     }
+
+    static async saveAdditionalArguments(additional_args) {
+        await AsyncSyncStorage.setStorage({ additional_args: additional_args });
+    }
+
+    static async getAdditionalArguments() {
+        const result = await AsyncSyncStorage.getStorage(["additional_args"]);
+        return result["additional_args"] ?? "";
+    }
 }
 
 export function intToUint8Array(num) {

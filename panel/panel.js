@@ -116,6 +116,13 @@ downloader_name.addEventListener('input', async function (event){
     console.log("input change", event);
     await SettingsManager.saveExecutableName(downloader_name.value);
 });
+
+const downloader_args = document.getElementById('downloader-args');
+downloader_args.addEventListener('input', async function (event){
+    console.log("input change", event);
+    await SettingsManager.saveAdditionalArguments(downloader_args.value);
+});
+
 // =================================================
 
 // ================ Keys ================
@@ -128,7 +135,10 @@ clear.addEventListener('click', async function() {
 async function createCommand(json, key_string) {
     const metadata = JSON.parse(json);
     const header_string = Object.entries(metadata.headers).map(([key, value]) => `-H "${key}: ${value.replace(/"/g, "'")}"`).join(' ');
-    return `${await SettingsManager.getExecutableName()} "${metadata.url}" ${header_string} ${key_string} ${await SettingsManager.getUseShakaPackager() ? "--use-shaka-packager " : ""}-M format=mkv`;
+    const executable_name = await SettingsManager.getExecutableName();
+    const use_shaka = await SettingsManager.getUseShakaPackager();
+    const additional_arguments = await SettingsManager.getAdditionalArguments();
+    return `${executable_name} '${metadata.url}' ${header_string} ${key_string} ${use_shaka ? " --decryption-engine SHAKA_PACKAGER " : ""} ${additional_arguments}`;
 }
 
 async function appendLog(result) {
@@ -231,7 +241,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     SettingsManager.setDarkMode(await SettingsManager.getDarkMode());
     use_shaka.checked = await SettingsManager.getUseShakaPackager();
     downloader_name.value = await SettingsManager.getExecutableName();
-    await SettingsManager.setSelectedDeviceType(await SettingsManager.getSelectedDeviceType());
+    downloader_args.value = await SettingsManager.getAdditionalArguments();
+    SettingsManager.setSelectedDeviceType(await SettingsManager.getSelectedDeviceType());
     await DeviceManager.loadSetAllWidevineDevices();
     await DeviceManager.selectWidevineDevice(await DeviceManager.getSelectedWidevineDevice());
     await RemoteCDMManager.loadSetAllRemoteCDMs();
