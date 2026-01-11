@@ -294,8 +294,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                             await parseLicenseRemote(message.body, sendResponse, tab_url);
                             break;
                     }
-                    return;
                 }
+                break;
             case "GET_LOGS":
                 sendResponse(logs);
                 break;
@@ -346,7 +346,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                         manifests.set(tab_url, elements);
                     }
                 }
+                
+                // Capture non-DRM manifests
+                if (parsed.url.includes('_nodrm_') || parsed.url.includes('nodrm')) {
+                    const pssh_key = "nodrm_" + Date.now();
+                    const log = {
+                        type: "NO-DRM",
+                        pssh_data: pssh_key,
+                        manifest_url: parsed.url,
+                        manifest_type: parsed.type,
+                        url: tab_url,
+                        timestamp: Math.floor(Date.now() / 1000),
+                        manifests: [element]
+                    };
+                    logs.push(log);
+                    await AsyncLocalStorage.setStorage({[pssh_key]: log});
+                }
+                
                 sendResponse();
+                break;
         }
     })();
     return true;

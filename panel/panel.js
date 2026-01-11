@@ -151,7 +151,7 @@ async function createCommand(json, key_string) {
 }
 
 async function appendLog(result) {
-    const key_string = result.keys.map(key => `--key ${key.kid}:${key.k}`).join(' ');
+    const key_string = result.keys ? result.keys.map(key => `--key ${key.kid}:${key.k}`).join(' ') : 'No keys (non-DRM)';
     const date = new Date(result.timestamp * 1000);
     const date_string = date.toLocaleString();
 
