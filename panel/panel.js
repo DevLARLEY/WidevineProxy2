@@ -147,11 +147,11 @@ async function createCommand(json, key_string) {
     const executableName = await SettingsManager.getExecutableName();
     const useShaka = await SettingsManager.getUseShakaPackager();
     const additionalArgs = await SettingsManager.getAdditionalArguments();
-    return `${executableName} "${metadata.url}" ${headerString} ${key_string} ${useShaka ? "--use-shaka-packager " : ""}${additionalArgs}`;
+    return `${executableName} "${metadata.url}" ${headerString} ${key_string} ${additionalArgs}`;
 }
 
 async function appendLog(result) {
-    const key_string = result.keys ? result.keys.map(key => `--key ${key.kid}:${key.k}`).join(' ') : 'No keys (non-DRM)';
+    const key_string = result.keys ? result.keys.map(key => `--key ${key.kid}:${key.k}`).join(' ') : '';
     const date = new Date(result.timestamp * 1000);
     const date_string = date.toLocaleString();
 
