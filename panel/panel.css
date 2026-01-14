@@ -4,19 +4,24 @@ body {
     color: black;
     width: 400px;
 }
+
 .toggleButton {
     width: 24px;
 }
+
 select {
     max-width: 330px;
 }
+
 .text-box {
     outline: none;
     width: 80%;
 }
+
 #downloader-name {
     width: 160px;
 }
+
 #export {
     margin-top: 5px;
 }
@@ -27,19 +32,26 @@ select {
     background-color: #1b1b1b;
     color: #D5D5D5;
 }
+
 .dark-mode fieldset {
     border-color: #535353;
 }
-.dark-mode button, .dark-mode select {
+
+.dark-mode button,
+.dark-mode select {
     background-color: #222;
     color: #D5D5D5;
 }
-.dark-mode button:hover, .dark-mode select:hover {
+
+.dark-mode button:hover,
+.dark-mode select:hover {
     background-color: #323232;
 }
+
 .dark-mode .expandableDiv {
     background-color: #1b2027;
 }
+
 .dark-mode .text-box {
     background-color: #323232;
     color: #D5D5D5;
@@ -53,6 +65,7 @@ select {
     height: 20px;
     margin-left: 10px;
 }
+
 .switch input {
     opacity: 0;
     width: 0;
@@ -71,6 +84,7 @@ select {
     transition: 0.4s;
     border-radius: 20px;
 }
+
 .slider:before {
     position: absolute;
     content: "";
@@ -81,10 +95,12 @@ select {
     background-color: white;
     border-radius: 50%;
 }
-input:checked + .slider {
+
+input:checked+.slider {
     background-color: #2196F3;
 }
-input:checked + .slider:before {
+
+input:checked+.slider:before {
     transform: translateX(20px);
 }
 
@@ -106,11 +122,13 @@ input:checked + .slider:before {
     justify-content: center;
     align-items: center;
 }
-.header > * {
+
+.header>* {
     margin: 5px;
 }
 
-#wvd > *, #remote > * {
+#wvd>*,
+#remote>* {
     margin: 5px;
 }
 
@@ -118,27 +136,34 @@ input:checked + .slider:before {
     display: flex;
     justify-content: center;
 }
+
 .right-bound {
     text-align: right;
 }
+
 .expandableDiv {
     width: 100%;
     overflow: hidden;
     background-color: lightblue;
     padding: 0;
 }
+
 .expandableDiv.expanded {
     padding: 5px;
 }
+
 .expandableDiv.collapsed {
     padding: 0;
 }
+
 .always-visible {
     display: block;
 }
+
 .expanded-only {
     display: none;
 }
+
 .expandableDiv.expanded .expanded-only {
     display: block;
 }
