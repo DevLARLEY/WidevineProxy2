@@ -4,7 +4,7 @@ const key_container = document.getElementById('key-container');
 
 // ================ Main ================
 const enabled = document.getElementById('enabled');
-enabled.addEventListener('change', async function (){
+enabled.addEventListener('change', async function () {
     await SettingsManager.setEnabled(enabled.checked);
 });
 
@@ -15,27 +15,27 @@ toggle.addEventListener('change', async () => {
 });
 
 const wvd_select = document.getElementById('wvd_select');
-wvd_select.addEventListener('change', async function (){
+wvd_select.addEventListener('change', async function () {
     if (wvd_select.checked) {
         await SettingsManager.saveSelectedDeviceType("WVD");
     }
 });
 
 const remote_select = document.getElementById('remote_select');
-remote_select.addEventListener('change', async function (){
+remote_select.addEventListener('change', async function () {
     if (remote_select.checked) {
         await SettingsManager.saveSelectedDeviceType("REMOTE");
     }
 });
 
 const export_button = document.getElementById('exportLogs');
-export_button.addEventListener('click', async function() {
+export_button.addEventListener('click', async function () {
     const logs = await AsyncLocalStorage.getStorage(null);
     SettingsManager.downloadFile(new Blob([JSON.stringify(logs)], { type: "application/json;charset=utf-8" }), "logs.json");
 });
 
 const clear_logs = document.getElementById('clearLogs');
-clear_logs.addEventListener('click', function() {
+clear_logs.addEventListener('click', function () {
     AsyncLocalStorage.clearStorage();
 });
 // ======================================
@@ -52,7 +52,7 @@ fileInput.addEventListener('click', () => {
 });
 
 const remove = document.getElementById('remove');
-remove.addEventListener('click', async function() {
+remove.addEventListener('click', async function () {
     await DeviceManager.removeSelectedWidevineDevice();
     wvd_combobox.innerHTML = '';
     await DeviceManager.loadSetAllWidevineDevices();
@@ -65,7 +65,7 @@ remove.addEventListener('click', async function() {
 });
 
 const download = document.getElementById('download');
-download.addEventListener('click', async function() {
+download.addEventListener('click', async function () {
     const widevine_device = await DeviceManager.getSelectedWidevineDevice();
     SettingsManager.downloadFile(
         Util.b64.decode(await DeviceManager.loadWidevineDevice(widevine_device)),
@@ -74,7 +74,7 @@ download.addEventListener('click', async function() {
 });
 
 const wvd_combobox = document.getElementById('wvd-combobox');
-wvd_combobox.addEventListener('change', async function() {
+wvd_combobox.addEventListener('change', async function () {
     await DeviceManager.saveSelectedWidevineDevice(wvd_combobox.options[wvd_combobox.selectedIndex].text);
 });
 // =================================================
@@ -90,7 +90,7 @@ document.getElementById('remoteInput').addEventListener('click', () => {
 });
 
 const remote_remove = document.getElementById('remoteRemove');
-remote_remove.addEventListener('click', async function() {
+remote_remove.addEventListener('click', async function () {
     await RemoteCDMManager.removeSelectedRemoteCDM();
     remote_combobox.innerHTML = '';
     await RemoteCDMManager.loadSetAllRemoteCDMs();
@@ -103,7 +103,7 @@ remote_remove.addEventListener('click', async function() {
 });
 
 const remote_download = document.getElementById('remoteDownload');
-remote_download.addEventListener('click', async function() {
+remote_download.addEventListener('click', async function () {
     const remote_cdm = await RemoteCDMManager.getSelectedRemoteCDM();
     SettingsManager.downloadFile(
         await RemoteCDMManager.loadRemoteCDM(remote_cdm),
@@ -112,31 +112,31 @@ remote_download.addEventListener('click', async function() {
 });
 
 const remote_combobox = document.getElementById('remote-combobox');
-remote_combobox.addEventListener('change', async function() {
+remote_combobox.addEventListener('change', async function () {
     await RemoteCDMManager.saveSelectedRemoteCDM(remote_combobox.options[remote_combobox.selectedIndex].text);
 });
 // ============================================
 
 // ================ Command Options ================
 const use_shaka = document.getElementById('use-shaka');
-use_shaka.addEventListener('change', async function (){
+use_shaka.addEventListener('change', async function () {
     await SettingsManager.saveUseShakaPackager(use_shaka.checked);
 });
 
 const downloader_name = document.getElementById('downloader-name');
-downloader_name.addEventListener('input', async function (){
+downloader_name.addEventListener('input', async function () {
     await SettingsManager.saveExecutableName(downloader_name.value);
 });
 
 const downloader_args = document.getElementById('downloader-args');
-downloader_args.addEventListener('input', async function (){
+downloader_args.addEventListener('input', async function () {
     await SettingsManager.saveAdditionalArguments(downloader_args.value);
 });
 // =================================================
 
 // ================ Keys ================
 const clear = document.getElementById('clear');
-clear.addEventListener('click', async function() {
+clear.addEventListener('click', async function () {
     chrome.runtime.sendMessage({ type: "CLEAR" });
     key_container.innerHTML = "";
 });

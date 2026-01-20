@@ -16,7 +16,7 @@ let sessions = new Map();
 let logs = [];
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
-    function(details) {
+    function (details) {
         if (details.method === "GET") {
             if (!requests.has(details.url)) {
                 const headers = details.requestHeaders
@@ -34,7 +34,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
             }
         }
     },
-    {urls: ["<all_urls>"]},
+    { urls: ["<all_urls>"] },
     ['requestHeaders', chrome.webRequest.OnSendHeadersOptions.EXTRA_HEADERS].filter(Boolean)
 );
 
@@ -46,7 +46,7 @@ async function parseClearKey(body, sendResponse, tab_url) {
         kid: Util.bytesToHex(Util.b64.decode(key.kid.replace(/-/g, "+").replace(/_/g, "/") + "==")),
         k: Util.bytesToHex(Util.b64.decode(key.k.replace(/-/g, "+").replace(/_/g, "/") + "=="))
     }));
-    const pssh_data = btoa(JSON.stringify({kids: clearkey["keys"].map(key => key.k)}));
+    const pssh_data = btoa(JSON.stringify({ kids: clearkey["keys"].map(key => key.k) }));
 
     if (logs.filter(log => log.pssh_data === pssh_data).length > 0) {
         console.log("[WidevineProxy2]", `KEYS_ALREADY_RETRIEVED: ${pssh_data}`);
@@ -65,12 +65,12 @@ async function parseClearKey(body, sendResponse, tab_url) {
     }
     logs.push(log);
 
-    await AsyncLocalStorage.setStorage({[pssh_data]: log});
+    await AsyncLocalStorage.setStorage({ [pssh_data]: log });
     sendResponse();
 }
 
 async function generateChallenge(body, sendResponse) {
-    const signed_message =  SignedMessage.decode(Util.b64.decode(body));
+    const signed_message = SignedMessage.decode(Util.b64.decode(body));
     const license_request = LicenseRequest.decode(signed_message.msg);
     const pssh_data = license_request.contentId.widevinePsshData.psshData[0];
 
@@ -141,14 +141,14 @@ async function parseLicense(body, sendResponse, tab_url) {
         manifests: manifests.has(tab_url) ? manifests.get(tab_url) : []
     }
     logs.push(log);
-    await AsyncLocalStorage.setStorage({[pssh]: log});
+    await AsyncLocalStorage.setStorage({ [pssh]: log });
 
     sessions.delete(loaded_request_id);
     sendResponse();
 }
 
 async function generateChallengeRemote(body, sendResponse) {
-    const signed_message =  SignedMessage.decode(Util.b64.decode(body));
+    const signed_message = SignedMessage.decode(Util.b64.decode(body));
     const license_request = LicenseRequest.decode(signed_message.msg);
     const pssh_data = license_request.contentId.widevinePsshData.psshData[0];
 
@@ -237,7 +237,7 @@ async function parseLicenseRemote(body, sendResponse, tab_url) {
         manifests: manifests.has(tab_url) ? manifests.get(tab_url) : []
     }
     logs.push(log);
-    await AsyncLocalStorage.setStorage({[session_id.pssh]: log});
+    await AsyncLocalStorage.setStorage({ [session_id.pssh]: log });
 
     sessions.delete(loaded_request_id);
     sendResponse();
